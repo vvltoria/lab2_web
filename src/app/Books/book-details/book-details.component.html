@@ -1,0 +1,28 @@
+<div *ngIf="book$ | async as book; else loading">
+  <h3>Детали книги: {{ book.name }}</h3>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ book.name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Автор: {{ book.author }}</h6>
+      <p class="card-text">
+        {{ book.description }}
+      </p>
+
+      <div>
+        <a [routerLink]="['../']" class="btn btn-secondary">
+          &larr; Назад к списку
+        </a>
+        <a [routerLink]="['../edit', book.id]" class="btn btn-primary ms-2">
+          Редактировать
+        </a>
+        <button type="button" class="btn btn-danger float-end" (click)="deleteBook()">
+          Удалить
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Загрузка данных...</p>
+</ng-template>

@@ -1,0 +1,14 @@
+<div class="mb-3">
+  <a routerLink="add" class="btn btn-primary">
+    + Добавить новую книгу
+  </a>
+</div>
+
+<h3>Список книг</h3>
+<ul class="list-group">
+  <li *ngFor="let book of books$ | async" class="list-group-item">
+    <a [routerLink]="[book.id]" routerLinkActive="active">
+      {{ book.name }} ({{ book.author }})
+    </a>
+  </li>
+</ul>

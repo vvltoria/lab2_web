@@ -1,0 +1,55 @@
+<div *ngIf="book">
+  <h3 *ngIf="isEditMode; else createTitle">Редактирование книги</h3>
+  <ng-template #createTitle>
+    <h3>Создание новой книги</h3>
+  </ng-template>
+
+  <form #bookForm="ngForm" (ngSubmit)="saveBook()">
+    
+    <div class="mb-3">
+      <label for="name" class="form-label">Название:</label>
+      <input type="text"
+             id="name"
+             name="name"
+             class="form-control"
+             placeholder="Война и мир"
+             [(ngModel)]="book.name"
+             required>
+    </div>
+    
+    <div class="mb-3">
+      <label for="author" class="form-label">Автор:</label>
+      <input type="text"
+             id="author"
+             name="author"
+             class="form-control"
+             placeholder="Лев Толстой"
+             [(ngModel)]="book.author"
+             required>
+    </div>
+    
+    <div class="mb-3">
+      <label for="description" class="form-label">Описание:</label>
+      <textarea id="description"
+                name="description"
+                class="form-control"
+                rows="4"
+                [(ngModel)]="book.description"
+                required></textarea>
+    </div>
+
+    <hr>
+
+    <div>
+      <button type="submit" class="btn btn-primary" [disabled]="!bookForm.valid">
+        Сохранить
+      </button>
+      <button type="button" class="btn btn-outline-info ms-2" (click)="clearForm()">
+        Очистить поля
+      </button>
+      <button type="button" class="btn btn-outline-secondary ms-2" (click)="cancel()">
+        Отмена
+      </button>
+    </div>
+  </form>
+</div>
