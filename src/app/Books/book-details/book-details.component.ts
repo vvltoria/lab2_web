@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { FirestoreService, Book } from '../services/firestore.service';
 import { Observable } from 'rxjs';
-import { FirestoreService, BookWithId } from '../services/firestore.service';
+
 @Component({
   selector: 'app-book-details',
   standalone: true,
@@ -11,28 +12,30 @@ import { FirestoreService, BookWithId } from '../services/firestore.service';
   styleUrl: './book-details.component.css'
 })
 export class BookDetailsComponent implements OnInit {
-  book$!: Observable<BookWithId>;
-  private bookId: string = ''; 
+  bookId!: number;
+  book$!: Observable<Book>;
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private router: Router
   ) {}
+
   ngOnInit(): void {
-    this.bookId = this.route.snapshot.paramMap.get('id') || '';
-    if (this.bookId) {
-      this.book$ = this.firestoreService.getBook(this.bookId);
-    }
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.bookId = idParam ? Number(idParam) : 0;
+    this.book$ = this.firestoreService.getBook(this.bookId);
   }
-  deleteBook(): void {
-    const isConfirmed = window.confirm('Вы уверены, что хотите удалить эту книгу?');
-    if (isConfirmed && this.bookId) {
-      this.firestoreService.deleteBook(this.bookId)
-        .then(() => {
-          window.alert('Книга была успешно удалена.');
+
+  deleteBook() {
+    if (confirm('Вы уверены, что хотите удалить эту книгу?')) {
+      this.firestoreService.deleteBook(this.bookId).subscribe({
+        next: () => {
+          console.log('Книга удалена');
           this.router.navigate(['/books']);
-        })
-        .catch(error => console.error('Ошибка при удалении книги:', error));
+        },
+        error: (err) => console.error('Ошибка при удалении:', err)
+      });
     }
   }
 }

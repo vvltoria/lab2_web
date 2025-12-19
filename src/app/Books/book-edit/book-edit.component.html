@@ -1,55 +1,33 @@
-<div *ngIf="book">
-  <h3 *ngIf="isEditMode; else createTitle">Редактирование книги</h3>
-  <ng-template #createTitle>
-    <h3>Создание новой книги</h3>
-  </ng-template>
-
-  <form #bookForm="ngForm" (ngSubmit)="saveBook()">
-    
+<div class="container mt-4">
+  <h3>{{ bookId ? 'Редактирование книги' : 'Добавление новой книги' }}</h3>
+  
+  <form (ngSubmit)="saveBook()">
     <div class="mb-3">
-      <label for="name" class="form-label">Название:</label>
-      <input type="text"
-             id="name"
-             name="name"
-             class="form-control"
-             placeholder="Война и мир"
-             [(ngModel)]="book.name"
-             required>
-    </div>
-    
-    <div class="mb-3">
-      <label for="author" class="form-label">Автор:</label>
-      <input type="text"
-             id="author"
-             name="author"
-             class="form-control"
-             placeholder="Лев Толстой"
-             [(ngModel)]="book.author"
-             required>
-    </div>
-    
-    <div class="mb-3">
-      <label for="description" class="form-label">Описание:</label>
-      <textarea id="description"
-                name="description"
-                class="form-control"
-                rows="4"
-                [(ngModel)]="book.description"
-                required></textarea>
+      <label for="title" class="form-label">Название книги</label>
+      <input type="text" class="form-control" id="title" [(ngModel)]="book.title" name="title" required>
     </div>
 
-    <hr>
-
-    <div>
-      <button type="submit" class="btn btn-primary" [disabled]="!bookForm.valid">
-        Сохранить
-      </button>
-      <button type="button" class="btn btn-outline-info ms-2" (click)="clearForm()">
-        Очистить поля
-      </button>
-      <button type="button" class="btn btn-outline-secondary ms-2" (click)="cancel()">
-        Отмена
-      </button>
+    <div class="mb-3" *ngIf="book.author">
+      <label for="authorLast" class="form-label">Фамилия автора</label>
+      <input type="text" class="form-control" id="authorLast" [(ngModel)]="book.author.lastName" name="authorLast" required>
     </div>
+    
+    <div class="mb-3" *ngIf="book.author">
+        <label for="authorFirst" class="form-label">Имя автора</label>
+        <input type="text" class="form-control" id="authorFirst" [(ngModel)]="book.author.firstName" name="authorFirst" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="genre" class="form-label">Жанр</label>
+      <input type="text" class="form-control" id="genre" [(ngModel)]="book.genre" name="genre">
+    </div>
+
+    <div class="mb-3">
+        <label for="year" class="form-label">Год издания</label>
+        <input type="number" class="form-control" id="year" [(ngModel)]="book.publicationYear" name="year">
+    </div>
+
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <a routerLink="/books" class="btn btn-secondary ms-2">Отмена</a>
   </form>
 </div>
